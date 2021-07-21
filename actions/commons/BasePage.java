@@ -1,5 +1,10 @@
 package commons;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -356,6 +361,11 @@ public class BasePage {
 		explicitWait = new WebDriverWait(driver, GlobalConstants.LONG_TIMEOUT);
 		explicitWait.until(ExpectedConditions.visibilityOfElementLocated(getByXpath(locator)));
 	}
+	
+	public void waitToAllElementsVisible(WebDriver driver, String locator) {
+		explicitWait = new WebDriverWait(driver, GlobalConstants.LONG_TIMEOUT);
+		explicitWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByXpath(locator)));
+	}
 
 	public void waitToElementInvisible(WebDriver driver, String locator) {
 		overrideGlobalTimeout(driver, GlobalConstants.SHORT_TIMEOUT);
@@ -396,6 +406,105 @@ public class BasePage {
 		String imagePath = System.getProperty("user.dir") + "\\uploadFiles\\" + fullImageName;
 		waitToElementVisible(driver, locator);
 		sendkeyToElement(driver, locator, imagePath);
+	}
+	
+	public boolean isDataStringSortedAscending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<String> actualDatas = new ArrayList<>();
+		ArrayList<String> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(tempElement.getText());
+		}
+		for(String tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		return actualDatas.equals(expectedDatas);
+	}
+	
+	public boolean isDataStringSortedDecending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<String> actualDatas = new ArrayList<>();
+		ArrayList<String> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(tempElement.getText());
+		}
+		for(String tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		Collections.reverse(expectedDatas);
+		return actualDatas.equals(expectedDatas);
+	}	
+	
+	public boolean isDataFloatSortedAscending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<Float> actualDatas = new ArrayList<>();
+		ArrayList<Float> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(Float.parseFloat(tempElement.getText().replaceAll("$", "").trim()));
+		}
+		for(Float tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		return actualDatas.equals(expectedDatas);
+	}
+	
+	public boolean isDataFloatSortedDecending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<Float> actualDatas = new ArrayList<>();
+		ArrayList<Float> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(Float.parseFloat(tempElement.getText().replaceAll("$", "").trim()));
+		}
+		for(Float tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		Collections.reverse(expectedDatas);
+		return actualDatas.equals(expectedDatas);
+	}
+	
+	public Date convertStringToDate(String dateInString) {
+		dateInString = dateInString.replace(",", "");
+		SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy");
+		Date date = null;
+		try {
+			date = format.parse(dateInString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+	
+	public boolean isDataDateSortedDecending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<Date> actualDatas = new ArrayList<>();
+		ArrayList<Date> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(convertStringToDate(tempElement.getText()));
+		}
+		for(Date tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		Collections.reverse(expectedDatas);
+		return actualDatas.equals(expectedDatas);
+	}
+	
+	public boolean isDataDateSortedAscending(WebDriver driver, String locator) {
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) getElements(driver, locator);
+		ArrayList<Date> actualDatas = new ArrayList<>();
+		ArrayList<Date> expectedDatas = new ArrayList<>();
+		for(WebElement tempElement:elements) {
+			actualDatas.add(convertStringToDate(tempElement.getText()));
+		}
+		for(Date tempData:actualDatas) {
+			expectedDatas.add(tempData);
+		}
+		Collections.sort(expectedDatas);
+		return actualDatas.equals(expectedDatas);
 	}
 	
 
