@@ -71,11 +71,30 @@ public class Employee_01_Add_Edit_Employee_User extends BaseTest {
 		
 		log.info("Step 08: Verify add employee successful");
 		verifyTrue(employeeDetailPage.isAddEmployeeSuccessful());
+		
+		log.info("Step 09: Verify first name");
+		verifyEquals(employeeDetailPage.getFirstNameDetail(), firstName);
+		
+		log.info("Step 10: Verify middle name");
+		verifyEquals(employeeDetailPage.getMiddleNameDetail(), middleName);
+		
+		log.info("Step 11: Verify last name");
+		verifyEquals(employeeDetailPage.getLastNameDetail(), lastName);
 	}
 	
 	@Test
-	public void Employee_02_Search_Employee() {
-	
+	public void Employee_02_Search_Employee_With_Name() {
+		log.info("Step 01: Click to Employee List");
+		employeeDetailPage.clickToEmployeeList();
+		
+		log.info("Step 02: Search employee with name");
+		employeeDetailPage.inputToEmployeeNameAtSearchEmployee(firstName + " " + middleName + " " + lastName);
+		
+		log.info("Step 03: Click search button");
+		employeeDetailPage.clickSearchButton();
+		
+		log.info("Step 04: Verify search successful");
+		verifyTrue(	employeeDetailPage.isSearchWithNameSuccessful(firstName + " " + middleName + " " + lastName));
 	}
 	
 	@Test
